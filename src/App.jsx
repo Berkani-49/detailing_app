@@ -1123,7 +1123,15 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
           refresh_url: `${window.location.origin}?stripe_connect_refresh=true`,
         },
       })
-      if (error) throw new Error(error.message)
+      if (error) {
+        // Extract the real error body from the edge function response
+        let msg = error.message
+        try {
+          const body = await error.context?.json?.()
+          if (body?.error) msg = body.error
+        } catch (_) {}
+        throw new Error(msg)
+      }
       if (data?.error) throw new Error(data.error)
       if (data.account_id) {
         sessionStorage.setItem('detailpro_connect_pending', JSON.stringify({
