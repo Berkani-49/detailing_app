@@ -994,10 +994,10 @@ function ProBooking({ detailer, profile, onBack }) {
 // ─── PRO ADMIN ────────────────────────────────────────────────────────────────
 function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpdate, onBack }) {
   const [tab,     setTab]     = useState('profil')
-  const [editing, setEditing] = useState(false)
+  const [editing, setEditing] = useState(!detailer)
   const [saving,  setSaving]  = useState(false)
   const [saved,   setSaved]   = useState(false)
-  const [creating, setCreating] = useState(false)
+  const [creating, setCreating] = useState(!detailer)
   const [connectLoading, setConnectLoading] = useState(false)
   const [connectError,   setConnectError]   = useState(null)
   const [proStats,     setProStats]     = useState(null)
