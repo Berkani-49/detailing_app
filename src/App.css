@@ -2,12 +2,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
   height: 100%;
-  background: #F2F2F7;
+  background: #EAEAF0;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -23,6 +26,34 @@ html, body {
   scrollbar-width: none;
 }
 
-input::placeholder {
-  color: #AEAEB2;
+input, textarea, select, button {
+  font-family: 'Outfit', -apple-system, sans-serif;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #B8B8C4;
+}
+
+button:active {
+  transform: scale(0.975);
+  transition: transform 0.08s;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.fade-in {
+  animation: fadeSlideUp 0.22s ease-out both;
 }

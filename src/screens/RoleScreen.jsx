@@ -8,77 +8,84 @@ export default function RoleScreen({ onSelect }) {
     {
       id: 'client',
       title: 'Je suis client',
-      subtitle: 'Trouvez un nettoyeur proche de chez vous, réservez en ligne et suivez votre véhicule en temps réel.',
+      subtitle: 'Trouvez un nettoyeur près de chez vous, réservez en ligne et suivez votre véhicule.',
       icon: (
-        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
           <circle cx="12" cy="7" r="4"/>
         </svg>
       ),
-      badge: 'Trouver un détailer',
+      accent: '#1D4ED8',
+      glow: 'rgba(29,78,216,0.4)',
     },
     {
       id: 'pro',
       title: 'Je suis nettoyeur',
-      subtitle: 'Gérez vos rendez-vous, votre planning et votre activité depuis une seule interface.',
+      subtitle: 'Gérez vos rendez-vous, votre planning et vos revenus depuis une seule interface.',
       icon: (
-        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
           <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
         </svg>
       ),
-      badge: 'Gérer mon activité',
+      accent: '#3730A3',
+      glow: 'rgba(55,48,163,0.35)',
     },
   ]
 
   return (
     <div style={{
-      minHeight: '100vh',
-      background: '#09090F',
+      minHeight: '100dvh',
+      background: '#08080E',
       backgroundImage:
-        'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,122,255,0.18) 0%, transparent 60%),' +
-        'radial-gradient(ellipse 50% 35% at 85% 105%, rgba(88,86,214,0.1) 0%, transparent 50%)',
+        'radial-gradient(ellipse 90% 55% at 50% -5%, rgba(29,78,216,0.22) 0%, transparent 65%),' +
+        'radial-gradient(ellipse 50% 30% at 88% 108%, rgba(124,58,237,0.12) 0%, transparent 55%)',
       fontFamily: FONT,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      padding: '0 24px 56px',
+      padding: '0 22px 52px',
+      overflowY: 'auto',
     }}>
       <StatusBar light />
 
-      {/* Logo */}
-      <div style={{ marginTop: 52, marginBottom: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Logo block */}
+      <div style={{ marginTop: 48, marginBottom: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{
-          width: 82, height: 82, borderRadius: 26,
-          background: 'linear-gradient(145deg,#141424,#1e1e38)',
-          border: '1px solid rgba(255,255,255,0.10)',
+          width: 86, height: 86, borderRadius: 28,
+          background: 'linear-gradient(145deg,#101020,#1C1C30)',
+          border: '1px solid rgba(255,255,255,0.08)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 0 0 1px rgba(0,122,255,0.18), 0 20px 60px rgba(0,0,0,0.6)',
-          marginBottom: 22,
+          boxShadow: '0 0 0 1px rgba(29,78,216,0.2), 0 24px 64px rgba(0,0,0,0.7)',
+          marginBottom: 24,
         }}>
-          <svg viewBox="0 0 48 48" width="54" height="54" fill="none">
-            <path d="M7 31L13 31L13 26Q16 17 25 13L37 13Q46 13 46 24L46 31L48 31" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M4 31L10 31L10 26Q14 17 24 13L37 13Q47 13 47 25L47 31L49 31" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.55)" strokeWidth="2" strokeLinecap="round"/>
-            <circle cx="15" cy="34" r="5" fill="none" stroke="white" strokeWidth="2.2"/>
-            <circle cx="36" cy="34" r="5" fill="none" stroke="white" strokeWidth="2.2"/>
-            <circle cx="29" cy="7" r="3.5" fill="#007AFF"/>
-            <line x1="29" y1="3" x2="29" y2="0.5" stroke="#007AFF" strokeWidth="1.8" strokeLinecap="round"/>
-            <line x1="32.5" y1="4.5" x2="34.5" y2="2.5" stroke="#007AFF" strokeWidth="1.8" strokeLinecap="round"/>
-            <line x1="25.5" y1="4.5" x2="23.5" y2="2.5" stroke="#007AFF" strokeWidth="1.8" strokeLinecap="round"/>
+          <svg viewBox="0 0 48 48" width="52" height="52" fill="none">
+            <path d="M4 31L10 31L10 26Q14 17 24 13L37 13Q47 13 47 25L47 31L49 31" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round"/>
+            <circle cx="15" cy="34" r="5" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="2.2"/>
+            <circle cx="36" cy="34" r="5" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="2.2"/>
+            <circle cx="29" cy="7" r="3.5" fill="#1D4ED8"/>
+            <line x1="29" y1="3" x2="29" y2="0.5" stroke="#1D4ED8" strokeWidth="1.8" strokeLinecap="round"/>
+            <line x1="32.5" y1="4.5" x2="34.5" y2="2.5" stroke="#1D4ED8" strokeWidth="1.8" strokeLinecap="round"/>
+            <line x1="25.5" y1="4.5" x2="23.5" y2="2.5" stroke="#1D4ED8" strokeWidth="1.8" strokeLinecap="round"/>
           </svg>
         </div>
-        <h1 style={{ color: '#FFFFFF', fontSize: 34, fontWeight: 800, letterSpacing: -1.2, margin: 0 }}>DetailPro</h1>
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 16, margin: '9px 0 0', textAlign: 'center', lineHeight: 1.5 }}>
+
+        <h1 style={{ color: '#FFFFFF', fontSize: 36, fontWeight: 900, letterSpacing: -1.5, margin: 0 }}>
+          DetailPro
+        </h1>
+        <p style={{ color: 'rgba(255,255,255,0.38)', fontSize: 15, margin: '10px 0 0', textAlign: 'center', lineHeight: 1.5, letterSpacing: 0.1 }}>
           L'excellence automobile<br />à portée de main
         </p>
-        <div style={{ display: 'flex', gap: 8, marginTop: 16, alignItems: 'center' }}>
+
+        {/* Country flags row */}
+        <div style={{ display: 'flex', gap: 6, marginTop: 18, alignItems: 'center', background: 'rgba(255,255,255,0.05)', borderRadius: R.full, padding: '6px 14px', border: '1px solid rgba(255,255,255,0.06)' }}>
           {['🇧🇪','🇫🇷','🇳🇱','🇱🇺','🇩🇪'].map((f, i) => (
-            <span key={i} style={{ fontSize: 18, opacity: 0.7 }}>{f}</span>
+            <span key={i} style={{ fontSize: 16, opacity: 0.75 }}>{f}</span>
           ))}
         </div>
       </div>
 
-      {/* Cards */}
-      <div style={{ width: '100%', maxWidth: 420, display: 'flex', flexDirection: 'column', gap: 14, marginTop: 44 }}>
+      {/* Role cards */}
+      <div style={{ width: '100%', maxWidth: 420, display: 'flex', flexDirection: 'column', gap: 12, marginTop: 44 }}>
         {roles.map(r => (
           <button
             key={r.id}
@@ -88,51 +95,64 @@ export default function RoleScreen({ onSelect }) {
             onTouchEnd={() => { setPressed(null); onSelect(r.id) }}
             onClick={() => onSelect(r.id)}
             style={{
-              width: '100%', border: '1px solid rgba(255,255,255,0.10)',
-              cursor: 'pointer', textAlign: 'left', fontFamily: FONT,
-              background: pressed === r.id ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.055)',
-              backdropFilter: 'blur(20px)',
+              width: '100%',
+              border: '1px solid rgba(255,255,255,0.09)',
+              cursor: 'pointer',
+              textAlign: 'left',
+              fontFamily: FONT,
+              background: pressed === r.id ? 'rgba(255,255,255,0.09)' : 'rgba(255,255,255,0.05)',
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
               borderRadius: 22,
-              padding: '22px 24px',
-              display: 'flex', alignItems: 'center', gap: 20,
-              transition: 'all 0.14s',
-              transform: pressed === r.id ? 'scale(0.98)' : 'scale(1)',
+              padding: '20px 22px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 18,
+              transition: 'transform 0.1s, background 0.1s',
+              transform: pressed === r.id ? 'scale(0.975)' : 'scale(1)',
               boxShadow: r.id === 'client'
-                ? '0 0 0 1px rgba(0,122,255,0.2), 0 8px 32px rgba(0,0,0,0.4)'
-                : '0 8px 32px rgba(0,0,0,0.3)',
+                ? `0 0 0 1px rgba(29,78,216,0.25), 0 12px 40px rgba(0,0,0,0.45)`
+                : '0 12px 36px rgba(0,0,0,0.35)',
             }}
           >
+            {/* Icon */}
             <div style={{
-              width: 56, height: 56, borderRadius: 18, flexShrink: 0,
-              background: r.id === 'client'
-                ? 'linear-gradient(145deg,#0050cc,#007AFF)'
-                : 'linear-gradient(145deg,#2a2a38,#3a3a50)',
+              width: 54, height: 54, borderRadius: 17, flexShrink: 0,
+              background: `linear-gradient(145deg,${r.accent}CC,${r.accent})`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: r.id === 'client' ? '0 4px 18px rgba(0,122,255,0.45)' : '0 4px 12px rgba(0,0,0,0.4)',
+              boxShadow: `0 6px 20px ${r.glow}`,
             }}>
               {r.icon}
             </div>
+
+            {/* Text */}
             <div style={{ flex: 1 }}>
-              <div style={{ color: '#FFFFFF', fontSize: 18, fontWeight: 700, marginBottom: 5, letterSpacing: -0.3 }}>
+              <div style={{ color: '#FFFFFF', fontSize: 17, fontWeight: 700, marginBottom: 4, letterSpacing: -0.2 }}>
                 {r.title}
               </div>
-              <div style={{ color: 'rgba(255,255,255,0.42)', fontSize: 13, lineHeight: 1.45 }}>
+              <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 13, lineHeight: 1.5 }}>
                 {r.subtitle}
               </div>
             </div>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+
+            {/* Arrow */}
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 18l6-6-6-6"/>
             </svg>
           </button>
         ))}
       </div>
 
-      <p style={{ color: 'rgba(255,255,255,0.18)', fontSize: 12, marginTop: 44, textAlign: 'center', lineHeight: 1.6 }}>
+      {/* Footer */}
+      <p style={{ color: 'rgba(255,255,255,0.15)', fontSize: 11, marginTop: 40, textAlign: 'center', lineHeight: 1.7, letterSpacing: 0.1 }}>
         En continuant, vous acceptez les{' '}
-        <span style={{ textDecoration: 'underline', cursor: 'pointer' }}>conditions d'utilisation</span>
+        <span style={{ textDecoration: 'underline', cursor: 'pointer', opacity: 1.4 }}>conditions d'utilisation</span>
         {' '}et la{' '}
         <span style={{ textDecoration: 'underline', cursor: 'pointer' }}>politique de confidentialité</span>
       </p>
     </div>
   )
 }
+
+// Local constant needed for the flag container border radius
+const R = { full: 999 }

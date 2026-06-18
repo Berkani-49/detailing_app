@@ -26,16 +26,48 @@ const PRO_TABS = [
 ]
 
 function NavBar({ tabs, active, onChange, accentColor }) {
+  const accent = accentColor || C.primary
   return (
-    <nav style={{ flexShrink:0, background:'rgba(249,249,249,0.98)', borderTop:`0.5px solid ${C.separator}`, display:'flex', padding:'10px 0 28px', justifyContent:'space-around' }}>
+    <nav style={{
+      flexShrink: 0,
+      background: 'rgba(255,255,255,0.92)',
+      backdropFilter: 'blur(24px)',
+      WebkitBackdropFilter: 'blur(24px)',
+      borderTop: `1px solid ${C.separator}`,
+      display: 'flex',
+      padding: '8px 8px 28px',
+      justifyContent: 'space-around',
+      gap: 4,
+    }}>
       {tabs.map(n => {
         const on = n.id === active
         return (
-          <button key={n.id} onClick={() => onChange(n.id)} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:4, background:'none', border:'none', cursor:'pointer', padding:'4px 10px', minWidth:56 }}>
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke={on ? (accentColor || C.primary) : C.quaternary} strokeWidth={on ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round">
-              <path d={n.d}/>
-            </svg>
-            <span style={{ fontSize:10, fontWeight:600, color: on ? (accentColor || C.primary) : C.quaternary, fontFamily:FONT }}>{n.label}</span>
+          <button key={n.id} onClick={() => onChange(n.id)} style={{
+            flex: 1,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+            background: 'none', border: 'none', cursor: 'pointer',
+            padding: '6px 4px 2px', borderRadius: R.lg,
+            position: 'relative',
+          }}>
+            <div style={{
+              width: 44, height: 32, borderRadius: R.md,
+              background: on ? `${accent}14` : 'transparent',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'background 0.18s',
+            }}>
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                stroke={on ? accent : C.tertiary}
+                strokeWidth={on ? 2.2 : 1.7}
+                strokeLinecap="round" strokeLinejoin="round">
+                <path d={n.d}/>
+              </svg>
+            </div>
+            <span style={{
+              fontSize: 10, fontWeight: on ? 700 : 500,
+              color: on ? accent : C.tertiary,
+              fontFamily: FONT, letterSpacing: on ? -0.1 : 0,
+              transition: 'color 0.18s',
+            }}>{n.label}</span>
           </button>
         )
       })}
@@ -46,17 +78,33 @@ function NavBar({ tabs, active, onChange, accentColor }) {
 // ─── LOADING ─────────────────────────────────────────────────────────────────
 function LoadingScreen() {
   return (
-    <div style={{ minHeight:'100vh', background:'#09090F', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:20, fontFamily:FONT }}>
-      <div style={{ width:64, height:64, borderRadius:20, background:'linear-gradient(145deg,#141424,#1e1e38)', border:'1px solid rgba(255,255,255,0.10)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-        <svg viewBox="0 0 48 48" width="40" height="40" fill="none">
-          <path d="M4 31L10 31L10 26Q14 17 24 13L37 13Q47 13 47 25L47 31L49 31" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.55)" strokeWidth="2" strokeLinecap="round"/>
-          <circle cx="15" cy="34" r="5" fill="none" stroke="white" strokeWidth="2.2"/>
-          <circle cx="36" cy="34" r="5" fill="none" stroke="white" strokeWidth="2.2"/>
-          <circle cx="29" cy="7" r="3.5" fill="#007AFF"/>
+    <div style={{
+      minHeight: '100dvh', background: '#08080E',
+      backgroundImage: 'radial-gradient(ellipse 80% 50% at 50% -5%, rgba(29,78,216,0.2) 0%, transparent 65%)',
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      gap: 24, fontFamily: FONT,
+    }}>
+      <div style={{
+        width: 80, height: 80, borderRadius: 26,
+        background: 'linear-gradient(145deg,#101020,#1C1C30)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        boxShadow: '0 0 0 1px rgba(29,78,216,0.2), 0 24px 64px rgba(0,0,0,0.6)',
+      }}>
+        <svg viewBox="0 0 48 48" width="48" height="48" fill="none">
+          <path d="M4 31L10 31L10 26Q14 17 24 13L37 13Q47 13 47 25L47 31L49 31" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round"/>
+          <circle cx="15" cy="34" r="5" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="2.2"/>
+          <circle cx="36" cy="34" r="5" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="2.2"/>
+          <circle cx="29" cy="7" r="3.5" fill="#1D4ED8"/>
+          <line x1="29" y1="3" x2="29" y2="0.5" stroke="#1D4ED8" strokeWidth="1.8" strokeLinecap="round"/>
+          <line x1="32.5" y1="4.5" x2="34.5" y2="2.5" stroke="#1D4ED8" strokeWidth="1.8" strokeLinecap="round"/>
+          <line x1="25.5" y1="4.5" x2="23.5" y2="2.5" stroke="#1D4ED8" strokeWidth="1.8" strokeLinecap="round"/>
         </svg>
       </div>
-      <div style={{ width:40, height:40, borderRadius:40, border:'3px solid rgba(255,255,255,0.08)', borderTop:'3px solid #007AFF', animation:'spin 0.8s linear infinite' }}/>
-      <p style={{ color:'rgba(255,255,255,0.3)', fontSize:14 }}>DetailPro</p>
+      <div>
+        <div style={{ color: '#fff', fontSize: 22, fontWeight: 800, letterSpacing: -0.6, textAlign: 'center', marginBottom: 6 }}>DetailPro</div>
+        <div style={{ width: 36, height: 36, borderRadius: 36, border: '2.5px solid rgba(255,255,255,0.07)', borderTop: `2.5px solid ${C.blue}`, animation: 'spin 0.75s linear infinite', margin: '0 auto' }} />
+      </div>
     </div>
   )
 }
@@ -73,61 +121,71 @@ function ClientHome({ profile, onExplore, onProfile }) {
   ]
 
   return (
-    <div style={{ paddingBottom:24, fontFamily:FONT }}>
-      <div style={{ padding:'8px 20px 22px', display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+    <div style={{ paddingBottom: 28, fontFamily: FONT }}>
+
+      {/* Hero header */}
+      <div style={{ padding: '12px 20px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <p style={{ color:C.tertiary, fontSize:14, margin:'0 0 3px' }}>{greeting} 👋</p>
-          <h1 style={{ color:C.primary, fontSize:30, fontWeight:800, margin:'0 0 2px', letterSpacing:-0.8 }}>{profile.full_name || 'Bienvenue'}</h1>
-          <p style={{ color:C.secondary, fontSize:15, margin:0 }}>Belgique · France · Pays-Bas · Luxembourg · Allemagne</p>
+          <p style={{ color: C.tertiary, fontSize: 13, fontWeight: 500, margin: '0 0 4px', letterSpacing: 0.1 }}>{greeting}</p>
+          <h1 style={{ color: C.primary, fontSize: 30, fontWeight: 800, margin: '0 0 2px', letterSpacing: -0.9 }}>
+            {profile.full_name?.split(' ')[0] || 'Bienvenue'}
+          </h1>
+          <p style={{ color: C.secondary, fontSize: 13, margin: 0 }}>BE · FR · NL · LU · DE</p>
         </div>
-        <button onClick={onProfile} style={{ marginTop:6, width:42, height:42, borderRadius:R.full, background:C.card, border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:SHADOW.sm, flexShrink:0 }}>
+        <button onClick={onProfile} style={{
+          marginTop: 4, width: 44, height: 44, borderRadius: R.full,
+          background: C.card, border: `1px solid ${C.separator}`,
+          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: SHADOW.sm, flexShrink: 0,
+        }}>
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke={C.secondary} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
           </svg>
         </button>
       </div>
 
-      {/* Search → go to explore */}
-      <div style={{ padding:'0 20px 24px' }}>
-        <button onClick={onExplore} style={{ width:'100%', background:C.card, border:'none', borderRadius:R.lg, padding:'14px 18px', display:'flex', alignItems:'center', gap:12, boxShadow:SHADOW.sm, cursor:'pointer', fontFamily:FONT, textAlign:'left' }}>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke={C.quaternary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-          </svg>
-          <span style={{ color:C.quaternary, fontSize:16 }}>Trouver un nettoyeur près de vous…</span>
+      {/* Search bar */}
+      <div style={{ padding: '0 20px 22px' }}>
+        <button onClick={onExplore} style={{
+          width: '100%', background: C.card, border: `1px solid ${C.separator}`,
+          borderRadius: R.xl, padding: '14px 18px',
+          display: 'flex', alignItems: 'center', gap: 12,
+          boxShadow: SHADOW.sm, cursor: 'pointer', fontFamily: FONT, textAlign: 'left',
+        }}>
+          <div style={{ width: 36, height: 36, borderRadius: R.md, background: `${C.blue}12`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke={C.blue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </div>
+          <span style={{ color: C.tertiary, fontSize: 15, fontWeight: 500 }}>Trouver un nettoyeur près de vous…</span>
         </button>
       </div>
 
-      {/* Countries quick filter */}
-      <div style={{ padding:'0 20px 24px' }}>
-        <SectionHeader title="Zones couvertes" />
-        <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
-          {[['🇧🇪','Belgique'],['🇫🇷','France'],['🇳🇱','Pays-Bas'],['🇱🇺','Luxembourg'],['🇩🇪','Allemagne']].map(([f, c]) => (
-            <button key={c} onClick={onExplore} style={{ background:C.card, border:'none', borderRadius:R.lg, padding:'10px 16px', display:'flex', alignItems:'center', gap:8, boxShadow:SHADOW.sm, cursor:'pointer', fontFamily:FONT }}>
-              <span style={{ fontSize:20 }}>{f}</span>
-              <span style={{ color:C.primary, fontSize:14, fontWeight:600 }}>{c}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Featured services preview */}
-      <div style={{ padding:'0 20px' }}>
-        <SectionHeader title="Services populaires" action="Explorer →" onAction={onExplore} />
-        <div className="no-scroll" style={{ display:'flex', gap:14, overflowX:'auto', paddingBottom:4 }}>
+      {/* Featured services */}
+      <div style={{ padding: '0 20px 24px' }}>
+        <SectionHeader title="Services populaires" action="Tout voir" onAction={onExplore} />
+        <div className="no-scroll" style={{ display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 4, marginLeft: -20, paddingLeft: 20, marginRight: -20, paddingRight: 20 }}>
           {featured.map((s, i) => (
-            <div key={i} onClick={onExplore} style={{ width:200, flexShrink:0, background:C.card, borderRadius:R.xl, overflow:'hidden', boxShadow:SHADOW.md, cursor:'pointer' }}>
-              <div style={{ height:100, background:svcGrad(s.name), display:'flex', alignItems:'center', justifyContent:'center' }}>
-                <CarSVG opacity={0.15} w="70%" />
+            <div key={i} onClick={onExplore} style={{
+              width: 210, flexShrink: 0, background: C.card, borderRadius: R.xl,
+              overflow: 'hidden', boxShadow: SHADOW.md, cursor: 'pointer',
+              border: `1px solid ${C.separator}`,
+            }}>
+              <div style={{ height: 110, background: svcGrad(s.name), display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                <CarSVG opacity={0.14} w="72%" />
+                <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.35)', borderRadius: R.full, padding: '3px 8px' }}>
+                  <span style={{ color: '#fff', fontSize: 11, fontWeight: 700 }}>{s.city}</span>
+                </div>
               </div>
-              <div style={{ padding:'12px 14px' }}>
-                <div style={{ color:C.primary, fontSize:14, fontWeight:700, marginBottom:3 }}>{s.name}</div>
-                <div style={{ color:C.secondary, fontSize:12 }}>{s.city} · {s.duration}</div>
-                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:8 }}>
-                  <div style={{ display:'flex', alignItems:'center', gap:4 }}>
-                    <Stars rating={s.rating} size={11} />
-                    <span style={{ color:C.secondary, fontSize:11 }}>{s.rating}</span>
+              <div style={{ padding: '13px 15px' }}>
+                <div style={{ color: C.primary, fontSize: 13, fontWeight: 700, marginBottom: 4, lineHeight: 1.35 }}>{s.name}</div>
+                <div style={{ color: C.tertiary, fontSize: 12, marginBottom: 8 }}>{s.duration}</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                    <Stars rating={s.rating} size={10} />
+                    <span style={{ color: C.secondary, fontSize: 11, fontWeight: 600 }}>{s.rating}</span>
                   </div>
-                  <span style={{ color:C.primary, fontSize:16, fontWeight:800 }}>dès {s.price}€</span>
+                  <span style={{ color: C.blue, fontSize: 15, fontWeight: 800 }}>dès {s.price} €</span>
                 </div>
               </div>
             </div>
@@ -136,21 +194,42 @@ function ClientHome({ profile, onExplore, onProfile }) {
       </div>
 
       {/* How it works */}
-      <div style={{ padding:'28px 20px 24px' }}>
+      <div style={{ padding: '0 20px 4px' }}>
         <SectionHeader title="Comment ça marche ?" />
-        <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {[
-            { n:'1', t:'Activez votre position', d:'Trouvez les nettoyeurs dans votre ville ou rayon choisi', c:C.blue   },
-            { n:'2', t:'Choisissez un nettoyeur', d:'Comparez les services, tarifs et avis clients',          c:C.indigo },
-            { n:'3', t:'Réservez en ligne',       d:'Choisissez votre créneau et confirmez en 1 clic',        c:C.green  },
+            {
+              n: '1', t: 'Activez votre position', d: 'Trouvez les nettoyeurs dans votre ville ou rayon choisi', c: C.blue,
+              icon: 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+            },
+            {
+              n: '2', t: 'Choisissez un nettoyeur', d: 'Comparez les services, tarifs et avis clients', c: C.indigo,
+              icon: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',
+            },
+            {
+              n: '3', t: 'Réservez en ligne', d: 'Choisissez votre créneau et confirmez en 1 clic', c: C.green,
+              icon: 'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z',
+            },
           ].map(s => (
-            <div key={s.n} style={{ background:C.card, borderRadius:R.lg, padding:'16px', boxShadow:SHADOW.sm, display:'flex', gap:14, alignItems:'center' }}>
-              <div style={{ width:36, height:36, borderRadius:R.full, background:`${s.c}18`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <span style={{ color:s.c, fontSize:16, fontWeight:800 }}>{s.n}</span>
+            <div key={s.n} style={{
+              background: C.card, borderRadius: R.xl, padding: '16px 18px',
+              boxShadow: SHADOW.sm, border: `1px solid ${C.separator}`,
+              display: 'flex', gap: 14, alignItems: 'center',
+            }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: R.lg, background: `${s.c}12`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              }}>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke={s.c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d={s.icon}/>
+                </svg>
               </div>
-              <div>
-                <div style={{ color:C.primary, fontSize:15, fontWeight:700 }}>{s.t}</div>
-                <div style={{ color:C.secondary, fontSize:13, marginTop:3 }}>{s.d}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+                  <span style={{ color: s.c, fontSize: 11, fontWeight: 800 }}>{s.n}</span>
+                  <div style={{ color: C.primary, fontSize: 15, fontWeight: 700 }}>{s.t}</div>
+                </div>
+                <div style={{ color: C.secondary, fontSize: 13, lineHeight: 1.45 }}>{s.d}</div>
               </div>
             </div>
           ))}
@@ -226,7 +305,7 @@ function ClientProfile({ profile, onLogout, onBack, onProfileUpdate }) {
 
       {/* Avatar card */}
       <div style={{ margin:'0 20px 20px', background:C.card, borderRadius:R.xxl, padding:'22px', boxShadow:SHADOW.md, display:'flex', alignItems:'center', gap:18 }}>
-        <div style={{ width:64, height:64, borderRadius:R.full, background:'linear-gradient(145deg,#007AFF,#5856D6)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, color:'#fff', fontWeight:800, flexShrink:0, letterSpacing:-1 }}>
+        <div style={{ width:64, height:64, borderRadius:R.full, background:'linear-gradient(145deg,#1D4ED8,#4338CA)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, color:'#fff', fontWeight:800, flexShrink:0, letterSpacing:-1 }}>
           {initials}
         </div>
         <div style={{ flex:1, minWidth:0 }}>
@@ -298,8 +377,10 @@ function ClientProfile({ profile, onLogout, onBack, onProfileUpdate }) {
 
         {/* Success banner */}
         {saved && (
-          <div style={{ background:'#F0FFF4', borderRadius:R.lg, padding:'14px 18px', display:'flex', alignItems:'center', gap:10, border:'1px solid rgba(52,199,89,0.25)' }}>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke={C.green} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <div style={{ background:`${C.green}10`, borderRadius:R.lg, padding:'14px 18px', display:'flex', alignItems:'center', gap:10, border:`1px solid ${C.green}28` }}>
+            <div style={{ width:24, height:24, borderRadius:R.full, background:C.green, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
             <span style={{ color:C.green, fontSize:14, fontWeight:600 }}>Profil mis à jour avec succès</span>
           </div>
         )}
@@ -371,7 +452,7 @@ function ProServices({ detailer, onBack }) {
     setConfirmDel(null)
   }
 
-  if (!detailer) return <EmptyState icon="🔧" title="Profil incomplet" subtitle="Configurez votre profil nettoyeur d'abord dans l'onglet Profil" />
+  if (!detailer) return <EmptyState icon={<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke={C.tertiary} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>} title="Profil incomplet" subtitle="Configurez votre profil nettoyeur d'abord dans l'onglet Profil" />
 
   const inputStyle = { width:'100%', background:C.fill2, border:`1.5px solid ${C.separator}`, borderRadius:R.sm, padding:'10px 12px', fontSize:15, color:C.primary, fontFamily:FONT, outline:'none', boxSizing:'border-box' }
 
@@ -478,7 +559,7 @@ function ProServices({ detailer, onBack }) {
       </div>
 
       {loading ? <Spinner /> : services.length === 0 ? (
-        <EmptyState icon="✨" title="Aucun service" subtitle="Ajoutez vos premières prestations pour commencer à recevoir des réservations" action="+ Ajouter un service" onAction={openNew} />
+        <EmptyState icon={<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke={C.tertiary} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>} title="Aucun service" subtitle="Ajoutez vos premières prestations pour commencer à recevoir des réservations" action="Ajouter un service" onAction={openNew} />
       ) : (
         <div style={{ padding:'0 20px', display:'flex', flexDirection:'column', gap:20 }}>
           {Object.entries(grouped).map(([cat, list]) => (
@@ -597,11 +678,22 @@ function ProTracking({ detailer, onBack }) {
       </div>
 
       {loading ? <Spinner /> : list.length === 0 ? (
-        <EmptyState
-          icon={tab === 'active' ? '✅' : '📋'}
-          title={tab === 'active' ? 'Aucun RDV actif' : 'Aucun historique'}
-          subtitle={tab === 'active' ? 'Tout est à jour ! Les nouvelles réservations apparaîtront ici.' : 'Vos RDV terminés et annulés apparaîtront ici.'}
-        />
+        <div style={{ padding: '40px 24px', textAlign: 'center', fontFamily: FONT }}>
+          <div style={{ width: 56, height: 56, borderRadius: R.xl, background: C.fill, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke={C.tertiary} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+              {tab === 'active'
+                ? <><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>
+                : <><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></>
+              }
+            </svg>
+          </div>
+          <h3 style={{ color: C.primary, fontSize: 17, fontWeight: 700, margin: '0 0 8px' }}>
+            {tab === 'active' ? 'Aucun RDV actif' : 'Aucun historique'}
+          </h3>
+          <p style={{ color: C.secondary, fontSize: 14, margin: 0, lineHeight: 1.5 }}>
+            {tab === 'active' ? 'Les nouvelles réservations apparaîtront ici.' : 'Vos RDV terminés et annulés apparaîtront ici.'}
+          </p>
+        </div>
       ) : (
         <div style={{ padding:'0 20px', display:'flex', flexDirection:'column', gap:14 }}>
           {list.map(b => {
@@ -631,10 +723,20 @@ function ProTracking({ detailer, onBack }) {
 
                   {/* Details */}
                   {(b.vehicle || b.profiles?.phone) && (
-                    <div style={{ background:C.fill2, borderRadius:R.md, padding:'10px 14px', marginBottom:12, display:'flex', flexDirection:'column', gap:4 }}>
-                      {b.vehicle    && <div style={{ color:C.secondary, fontSize:13 }}>🚗 {b.vehicle}</div>}
-                      {b.profiles?.phone && <div style={{ color:C.blue, fontSize:13 }}>📞 {b.profiles.phone}</div>}
-                      {b.notes      && <div style={{ color:C.tertiary, fontSize:12 }}>📝 {b.notes}</div>}
+                    <div style={{ background:C.fill2, borderRadius:R.md, padding:'10px 14px', marginBottom:12, display:'flex', flexDirection:'column', gap:5 }}>
+                      {b.vehicle && (
+                        <div style={{ display:'flex', alignItems:'center', gap:7, color:C.secondary, fontSize:13 }}>
+                          <svg viewBox="0 0 48 48" width="15" height="15" fill="none"><path d="M6 30L10 30L10 25Q14 18 22 15L34 15Q44 15 44 25L44 30L46 30" stroke={C.tertiary} strokeWidth="3" strokeLinecap="round" fill="none"/><circle cx="16" cy="33" r="4" fill="none" stroke={C.tertiary} strokeWidth="3"/><circle cx="36" cy="33" r="4" fill="none" stroke={C.tertiary} strokeWidth="3"/></svg>
+                          {b.vehicle}
+                        </div>
+                      )}
+                      {b.profiles?.phone && (
+                        <div style={{ display:'flex', alignItems:'center', gap:7, color:C.blue, fontSize:13 }}>
+                          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke={C.blue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                          {b.profiles.phone}
+                        </div>
+                      )}
+                      {b.notes && <div style={{ color:C.tertiary, fontSize:12, marginTop:2 }}>{b.notes}</div>}
                     </div>
                   )}
 
@@ -837,7 +939,7 @@ function ProBooking({ detailer, profile, onBack }) {
 
         {/* Récap */}
         {form.service_id && form.date && form.time && (
-          <div style={{ background:'#EBF5FF', borderRadius:R.xl, padding:'16px 18px', border:'1px solid rgba(0,122,255,0.2)' }}>
+          <div style={{ background:`${C.blue}0A`, borderRadius:R.xl, padding:'16px 18px', border:`1px solid ${C.blue}25` }}>
             <div style={{ color:C.blue, fontSize:13, fontWeight:700, marginBottom:8 }}>Récapitulatif</div>
             {[
               ['Service', services.find(s=>s.id===form.service_id)?.name],
@@ -881,8 +983,10 @@ function ProBooking({ detailer, profile, onBack }) {
       </div>
 
       {savedMsg && (
-        <div style={{ margin:'0 20px 14px', background:'#F0FFF4', borderRadius:R.lg, padding:'12px 16px', display:'flex', alignItems:'center', gap:10, border:'1px solid rgba(52,199,89,0.25)' }}>
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke={C.green} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <div style={{ margin:'0 20px 14px', background:`${C.green}10`, borderRadius:R.lg, padding:'12px 16px', display:'flex', alignItems:'center', gap:10, border:`1px solid ${C.green}28` }}>
+          <div style={{ width:22, height:22, borderRadius:R.full, background:C.green, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
           <span style={{ color:C.green, fontSize:14, fontWeight:600 }}>RDV créé avec succès</span>
         </div>
       )}
@@ -970,7 +1074,7 @@ function ProBooking({ detailer, profile, onBack }) {
                           </div>
                           <div style={{ color:C.secondary, fontSize:13 }}>{b.profiles?.full_name || (isManual ? b.notes?.match(/Client : ([^·]+)/)?.[1]?.trim() : 'Client')} · {dur}</div>
                           <div style={{ color:C.tertiary, fontSize:12, marginTop:2 }}>{b.services?.name}</div>
-                          {b.vehicle && b.vehicle !== 'Non précisé' && <div style={{ color:C.tertiary, fontSize:12 }}>🚗 {b.vehicle}</div>}
+                          {b.vehicle && b.vehicle !== 'Non précisé' && <div style={{ color:C.tertiary, fontSize:12, marginTop:2 }}>{b.vehicle}</div>}
                         </div>
                         <div style={{ textAlign:'right' }}>
                           <div style={{ background:`${cfg.color}18`, borderRadius:R.full, padding:'3px 10px', marginBottom:6 }}>
@@ -997,6 +1101,7 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
   const [editing, setEditing] = useState(!detailer)
   const [saving,  setSaving]  = useState(false)
   const [saved,   setSaved]   = useState(false)
+  const [saveError, setSaveError] = useState(null)
   const [creating, setCreating] = useState(!detailer)
   const [connectLoading, setConnectLoading] = useState(false)
   const [connectError,   setConnectError]   = useState(null)
@@ -1061,51 +1166,76 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
 
   const handleSave = async () => {
     setSaving(true)
-    await supabase.from('profiles').update({ full_name: form.full_name, phone: form.phone_perso }).eq('id', profile.id)
+    setSaveError(null)
+    try {
+      // Mise à jour du profil utilisateur
+      const { error: profErr } = await supabase
+        .from('profiles')
+        .update({ full_name: form.full_name, phone: form.phone_perso })
+        .eq('id', profile.id)
+      if (profErr) throw new Error(profErr.message)
+      onProfileUpdate?.({ full_name: form.full_name, phone: form.phone_perso })
 
-    onProfileUpdate?.({ full_name: form.full_name, phone: form.phone_perso })
+      if (detailer) {
+        // Mise à jour du profil detailer existant
+        const { data: updated, error: updErr } = await supabase
+          .from('detailers')
+          .update({
+            business_name: form.business_name,
+            description:   form.description,
+            address:       form.address,
+            city:          form.city,
+            postal_code:   form.postal_code,
+            country_code:  form.country_code,
+            phone:         form.phone,
+            website:       form.website,
+          })
+          .eq('id', detailer.id)
+          .select()
+          .single()
+        if (updErr) throw new Error(updErr.message)
+        if (updated) onDetailerUpdate(updated)
+        setSaving(false); setEditing(false); setSaved(true)
+        setTimeout(() => setSaved(false), 2500)
+      } else {
+        // Création du profil detailer (première fois)
+        let lat = 50.8503, lng = 4.3517
+        try {
+          const pos = await new Promise((res, rej) =>
+            navigator.geolocation.getCurrentPosition(res, rej, { timeout: 4000 })
+          )
+          lat = pos.coords.latitude; lng = pos.coords.longitude
+        } catch {}
 
-    if (detailer) {
-      const { data: updated } = await supabase.from('detailers').update({
-        business_name: form.business_name,
-        description:   form.description,
-        address:       form.address,
-        city:          form.city,
-        postal_code:   form.postal_code,
-        country_code:  form.country_code,
-        phone:         form.phone,
-        website:       form.website,
-      }).eq('id', detailer.id).select().single()
-      if (updated) onDetailerUpdate(updated)
-    } else if (creating) {
-      let lat = 50.8503, lng = 4.3517
-      try {
-        const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 4000 }))
-        lat = pos.coords.latitude; lng = pos.coords.longitude
-      } catch {}
-      const { data: created } = await supabase.from('detailers').insert({
-        profile_id:    profile.id,
-        business_name: form.business_name || 'Mon entreprise',
-        description:   form.description,
-        address:       form.address || 'À compléter',
-        city:          form.city    || 'À compléter',
-        postal_code:   form.postal_code,
-        country_code:  form.country_code,
-        phone:         form.phone,
-        website:       form.website,
-        lat, lng,
-      }).select().single()
-      if (created) {
-        onDetailerUpdate(created)
-        setCreating(false)
-        setSaving(false)
-        onBack()
-        return
+        const { data: created, error: insErr } = await supabase
+          .from('detailers')
+          .upsert({
+            profile_id:    profile.id,
+            business_name: form.business_name || 'Mon entreprise',
+            description:   form.description,
+            address:       form.address || 'À compléter',
+            city:          form.city    || 'À compléter',
+            postal_code:   form.postal_code,
+            country_code:  form.country_code,
+            phone:         form.phone,
+            website:       form.website,
+            lat, lng,
+          }, { onConflict: 'profile_id' })
+          .select()
+          .single()
+
+        if (insErr) throw new Error(insErr.message)
+        if (created) {
+          onDetailerUpdate(created)
+          setCreating(false)
+          setSaving(false)
+          onBack()
+        }
       }
+    } catch (e) {
+      setSaveError(e.message)
+      setSaving(false)
     }
-
-    setSaving(false); setEditing(false); setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
   }
 
   // ── Stripe Connect onboarding ────────────────────────────────────────────────
@@ -1187,7 +1317,7 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
 
           {/* Avatar */}
           <div style={{ background:C.card, borderRadius:R.xxl, padding:'22px', boxShadow:SHADOW.md, display:'flex', alignItems:'center', gap:18 }}>
-            <div style={{ width:64, height:64, borderRadius:R.full, background:'linear-gradient(145deg,#1C1C1E,#3a3a50)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, color:'#fff', fontWeight:800, flexShrink:0 }}>
+            <div style={{ width:64, height:64, borderRadius:R.full, background:'linear-gradient(145deg,#1D4ED8,#4338CA)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, color:'#fff', fontWeight:800, flexShrink:0 }}>
               {initials}
             </div>
             <div style={{ flex:1, minWidth:0 }}>
@@ -1204,7 +1334,10 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
           {/* No detailer yet */}
           {!detailer && !creating && (
             <div style={{ background:'#FFF8E8', borderRadius:R.xl, padding:'20px', border:'1px solid rgba(255,149,0,0.25)' }}>
-              <div style={{ color:'#CC7A00', fontSize:15, fontWeight:700, marginBottom:6 }}>⚠ Profil nettoyeur non créé</div>
+              <div style={{ color:'#CC7A00', fontSize:15, fontWeight:700, marginBottom:6, display:'flex', alignItems:'center', gap:8 }}>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#CC7A00" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Profil nettoyeur non créé
+              </div>
               <div style={{ color:'#996600', fontSize:13, lineHeight:1.5, marginBottom:14 }}>
                 Créez votre profil pro pour apparaître dans les recherches et recevoir des réservations.
               </div>
@@ -1308,11 +1441,14 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
                       Connectez un compte Stripe pour recevoir les paiements directement sur votre compte bancaire — en Belgique et à l'international.
                     </div>
                     <button onClick={handleConnectStripe} disabled={connectLoading} style={{ width:'100%', background:C.primary, border:'none', borderRadius:R.lg, padding:'13px', color:'#fff', fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:FONT, boxShadow:SHADOW.sm, opacity:connectLoading?0.7:1 }}>
-                      {connectLoading ? 'Chargement…' : '💳 Activer les paiements en ligne →'}
+                      {connectLoading ? 'Chargement…' : 'Activer les paiements en ligne →'}
                     </button>
                   </div>
                 )}
-                {connectError && <p style={{ color:C.red, fontSize:13, margin:'12px 0 0' }}>⚠ {connectError}</p>}
+                {connectError && <p style={{ color:C.red, fontSize:13, margin:'12px 0 0', display:'flex', alignItems:'center', gap:6 }}>
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke={C.red} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  {connectError}
+                </p>}
               </div>
             </div>
           )}
@@ -1350,6 +1486,12 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
               <span style={{ color:C.green, fontSize:14, fontWeight:600 }}>Profil mis à jour avec succès</span>
             </div>
           )}
+          {saveError && (
+            <div style={{ background:'#FEF2F2', borderRadius:R.lg, padding:'14px 18px', display:'flex', alignItems:'flex-start', gap:10, border:'1px solid rgba(220,38,38,0.2)' }}>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke={C.red} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink:0, marginTop:1 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span style={{ color:'#991B1B', fontSize:13, lineHeight:1.5 }}>{saveError}</span>
+            </div>
+          )}
 
           {/* Déconnexion */}
           <button onClick={onLogout} style={{ width:'100%', background:C.card, border:'none', borderRadius:R.xl, padding:'17px', color:C.red, fontSize:16, fontWeight:600, cursor:'pointer', fontFamily:FONT, boxShadow:SHADOW.sm, display:'flex', alignItems:'center', justifyContent:'center', gap:10 }}>
@@ -1365,7 +1507,7 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
       {tab === 'stats' && (
         <div style={{ padding:'0 20px', display:'flex', flexDirection:'column', gap:14 }}>
           {!detailer ? (
-            <EmptyState icon="📊" title="Profil requis" subtitle="Créez votre profil nettoyeur pour accéder aux statistiques." />
+            <EmptyState icon={<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke={C.tertiary} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>} title="Profil requis" subtitle="Créez votre profil nettoyeur pour accéder aux statistiques." />
           ) : statsLoading || !proStats ? (
             <Spinner />
           ) : (
@@ -1379,21 +1521,23 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
                   {Math.round(proStats.caMonth).toLocaleString('fr-BE')}<span style={{ fontSize:22, fontWeight:500 }}> €</span>
                 </div>
                 <div style={{ color:'rgba(255,255,255,0.55)', fontSize:13, marginTop:10, display:'flex', gap:20 }}>
-                  <span>🗓 {proStats.rdvMonth} RDV</span>
-                  <span>👤 {proStats.clientsMonth} client{proStats.clientsMonth !== 1 ? 's' : ''}</span>
+                  <span>{proStats.rdvMonth} RDV ce mois</span>
+                  <span>{proStats.clientsMonth} client{proStats.clientsMonth !== 1 ? 's' : ''}</span>
                 </div>
               </div>
 
               {/* Chiffres globaux */}
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
                 {[
-                  { label:'CA total', value:`${Math.round(proStats.caTotal).toLocaleString('fr-BE')} €`, icon:'💰', color:C.green },
-                  { label:'RDV total terminés', value:proStats.rdvTotal, icon:'✅', color:C.blue },
-                  { label:'Note moyenne', value:`${detailer.rating?.toFixed(1) || '—'} ★`, icon:'⭐', color:C.orange },
-                  { label:'Avis clients', value:detailer.review_count || 0, icon:'💬', color:C.indigo },
-                ].map(({ label, value, icon, color }) => (
-                  <div key={label} style={{ background:C.card, borderRadius:R.xl, padding:'18px', boxShadow:SHADOW.sm }}>
-                    <div style={{ fontSize:22, marginBottom:6 }}>{icon}</div>
+                  { label:'CA total', value:`${Math.round(proStats.caTotal).toLocaleString('fr-BE')} €`, color:C.green, d:'M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' },
+                  { label:'RDV terminés', value:proStats.rdvTotal, color:C.blue, d:'M22 11.08V12a10 10 0 1 1-5.93-9.14 M22 4L12 14.01l-3-3' },
+                  { label:'Note moyenne', value:`${detailer.rating?.toFixed(1) || '—'} ★`, color:C.orange, d:'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' },
+                  { label:'Avis clients', value:detailer.review_count || 0, color:C.indigo, d:'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z' },
+                ].map(({ label, value, color, d }) => (
+                  <div key={label} style={{ background:C.card, borderRadius:R.xl, padding:'18px', boxShadow:SHADOW.sm, border:`1px solid ${C.separator}` }}>
+                    <div style={{ width:32, height:32, borderRadius:R.md, background:`${color}12`, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={d}/></svg>
+                    </div>
                     <div style={{ color, fontSize:20, fontWeight:900, letterSpacing:-0.5 }}>{value}</div>
                     <div style={{ color:C.tertiary, fontSize:12, fontWeight:600, marginTop:4 }}>{label}</div>
                   </div>
@@ -1457,8 +1601,9 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
               )}
 
               {/* Rafraîchir */}
-              <button onClick={() => { setProStats(null) }} style={{ background:C.fill2, border:'none', borderRadius:R.lg, padding:'12px', color:C.secondary, fontSize:13, fontWeight:600, cursor:'pointer', fontFamily:FONT }}>
-                ↻ Actualiser les données
+              <button onClick={() => { setProStats(null) }} style={{ background:C.card, border:`1px solid ${C.separator}`, borderRadius:R.lg, padding:'12px 18px', color:C.secondary, fontSize:13, fontWeight:600, cursor:'pointer', fontFamily:FONT, display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke={C.secondary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Actualiser
               </button>
             </>
           )}
@@ -1477,21 +1622,36 @@ export default function App() {
   const [roleChoice,   setRoleChoice]   = useState(null)
   const [stripeReturn, setStripeReturn] = useState(null) // null | 'processing' | 'success' | 'error'
   const [initialTab,   setInitialTab]   = useState(null) // force une tab au démarrage
+  const [authUrlError, setAuthUrlError] = useState(null) // erreur OTP dans le hash d'URL
 
   // Auth state listener
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      if (session) loadProfile(session.user.id)
-      else setAppLoading(false)
-    })
+    // Détecter les erreurs auth dans le hash d'URL (ex: lien de confirmation expiré)
+    const hash = window.location.hash
+    if (hash.includes('error_code=otp_expired') || hash.includes('error=access_denied')) {
+      const params = new URLSearchParams(hash.replace('#', ''))
+      setAuthUrlError(params.get('error_code') || 'otp_expired')
+      window.history.replaceState({}, '', window.location.pathname)
+    }
+
+    // Failsafe : si Supabase ne répond pas dans les 8s, on débloque l'écran
+    const timeout = setTimeout(() => setAppLoading(false), 8000)
+
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        clearTimeout(timeout)
+        setSession(session)
+        if (session) loadProfile(session.user.id)
+        else setAppLoading(false)
+      })
+      .catch(() => { clearTimeout(timeout); setAppLoading(false) })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setSession(session)
       if (session) loadProfile(session.user.id)
       else { setProfile(null); setDetailer(null); setAppLoading(false) }
     })
-    return () => subscription.unsubscribe()
+    return () => { subscription.unsubscribe(); clearTimeout(timeout) }
   }, [])
 
   const loadProfile = async (uid) => {
@@ -1530,7 +1690,7 @@ export default function App() {
             .from('detailers')
             .select('*')
             .eq('profile_id', uid)
-            .single()
+            .maybeSingle()
 
           let detailerData = det || null
 
@@ -1620,12 +1780,14 @@ export default function App() {
   // Not logged in
   if (!session) {
     if (!roleChoice) return <RoleScreen onSelect={setRoleChoice} />
-    return <AuthScreen role={roleChoice} onBack={() => setRoleChoice(null)} />
+    return <AuthScreen role={roleChoice} onBack={() => setRoleChoice(null)} urlError={authUrlError} onClearUrlError={() => setAuthUrlError(null)} />
   }
 
   if (!profile) return (
     <div style={{ minHeight:'100vh', background:C.bg, fontFamily:FONT, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'40px 28px', gap:20, textAlign:'center' }}>
-      <div style={{ fontSize:48 }}>⚠️</div>
+      <div style={{ width:72, height:72, borderRadius:R.xxl, background:`${C.orange}12`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke={C.orange} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
       <h2 style={{ color:C.primary, fontSize:22, fontWeight:800, margin:0 }}>Profil introuvable</h2>
       <p style={{ color:C.secondary, fontSize:15, margin:0, lineHeight:1.6 }}>
         Votre compte existe mais le profil n'a pas été créé.<br/>
@@ -1640,7 +1802,9 @@ export default function App() {
   // Alerte si schema non appliqué mais profil local créé
   if (profile._schemaError) return (
     <div style={{ minHeight:'100vh', background:C.bg, fontFamily:FONT, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'40px 28px', gap:20, textAlign:'center' }}>
-      <div style={{ fontSize:48 }}>🗄️</div>
+      <div style={{ width:72, height:72, borderRadius:R.xxl, background:`${C.blue}12`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke={C.blue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      </div>
       <h2 style={{ color:C.primary, fontSize:22, fontWeight:800, margin:0 }}>Base de données non configurée</h2>
       <p style={{ color:C.secondary, fontSize:15, margin:0, lineHeight:1.6 }}>
         Copiez le contenu de <strong>schema.sql</strong> dans<br/>
@@ -1693,7 +1857,9 @@ export default function App() {
 
   if (stripeReturn === 'error') return (
     <div style={{ minHeight:'100vh', background:C.bg, fontFamily:FONT, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:20, padding:'40px 28px', textAlign:'center' }}>
-      <div style={{ width:80, height:80, borderRadius:R.full, background:'#FFF2F2', display:'flex', alignItems:'center', justifyContent:'center', fontSize:40 }}>❌</div>
+      <div style={{ width:80, height:80, borderRadius:R.full, background:`${C.red}12`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke={C.red} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      </div>
       <div>
         <h2 style={{ color:C.primary, fontSize:24, fontWeight:800, margin:'0 0 8px' }}>Paiement non abouti</h2>
         <p style={{ color:C.secondary, fontSize:15, margin:0, lineHeight:1.5 }}>

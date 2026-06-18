@@ -46,8 +46,8 @@ Deno.serve(async (req: Request) => {
       amount:   amountCents,
       currency: 'eur',
       description,
-      // Méthodes de paiement européennes courantes
-      payment_method_types: ['card', 'bancontact', 'ideal'],
+      // Carte + Bancontact (Belgique). iDEAL retiré — nécessite activation séparée.
+      payment_method_types: ['card', 'bancontact'],
     }
 
     // ── Stripe Connect : routage vers le compte du nettoyeur ────────────────

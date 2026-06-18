@@ -77,7 +77,7 @@ export default function DetailerScreen({ detailer, profile, onBack, onBooked }) 
         <Sep />
         <Row label="Service"    value={booking?.name} />
         <Sep />
-        <Row label="Paiement"   value="✓ Payé en ligne" />
+        <Row label="Paiement"   value="Payé en ligne" />
         <Sep />
         <Row label="Total"      value={`${booking?.price} €`} bold />
       </div>
@@ -144,7 +144,11 @@ export default function DetailerScreen({ detailer, profile, onBack, onBooked }) 
           <span style={{ color: C.primary, fontSize: 14, fontWeight: 700 }}>{(detailer.rating || 0).toFixed(1)}</span>
           <span style={{ color: C.tertiary, fontSize: 14 }}>{detailer.review_count} avis</span>
           {detailer.distance != null && (
-            <span style={{ color: C.blue, fontSize: 14, marginLeft: 4 }}>· 📍 {formatDistance(detailer.distance)}</span>
+            <span style={{ color: C.blue, fontSize: 14, marginLeft: 4, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              ·
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke={C.blue} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              {formatDistance(detailer.distance)}
+            </span>
           )}
         </div>
 
@@ -235,11 +239,34 @@ function ServiceRow({ svc, onBook }) {
 }
 
 const ONLINE_METHODS  = ['bancontact', 'card']
+const PAY_ICON = {
+  card: (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+    </svg>
+  ),
+  bancontact: (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+    </svg>
+  ),
+  cash: (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>
+  ),
+  transfer: (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  ),
+}
+
 const ALL_PAY_METHODS = [
-  { id: 'card',       label: 'Carte',      icon: '💳', online: true  },
-  { id: 'bancontact', label: 'Bancontact', icon: '📱', online: true  },
-  { id: 'cash',       label: 'Espèces',    icon: '💵', online: false },
-  { id: 'transfer',   label: 'Virement',   icon: '🏦', online: false },
+  { id: 'card',       label: 'Carte',      online: true  },
+  { id: 'bancontact', label: 'Bancontact', online: true  },
+  { id: 'cash',       label: 'Espèces',    online: false },
+  { id: 'transfer',   label: 'Virement',   online: false },
 ]
 
 function BookingSheet({ service, detailer, profile, onBack, onConfirm }) {
@@ -352,7 +379,7 @@ function BookingSheet({ service, detailer, profile, onBack, onConfirm }) {
                       boxShadow: SHADOW.sm, transition: 'all 0.15s',
                     }}
                   >
-                    <span style={{ fontSize: 20 }}>{pm.icon}</span>
+                    <span style={{ color: paymentMethod === pm.id ? '#fff' : C.secondary }}>{PAY_ICON[pm.id]}</span>
                     <div style={{ textAlign: 'left' }}>
                       <div style={{ color: paymentMethod === pm.id ? '#fff' : C.primary, fontSize: 13, fontWeight: 700 }}>
                         {pm.label}
@@ -415,6 +442,11 @@ function StripePaymentStep({ service, detailer, profile, day, slot, form, paymen
   const [fetchError,   setFetchError]   = useState(null)
 
   useEffect(() => {
+    if (!service.price || service.price <= 0) {
+      setFetchError('Ce service ne peut pas être payé en ligne (prix invalide).')
+      setLoading(false)
+      return
+    }
     supabase.functions.invoke('create-payment-intent', {
       body: {
         amount:            service.price,
@@ -422,8 +454,13 @@ function StripePaymentStep({ service, detailer, profile, day, slot, form, paymen
         stripe_account_id: detailer.stripe_account_id || null,
       },
     })
-      .then(({ data, error }) => {
-        if (error) throw new Error(error.message)
+      .then(async ({ data, error }) => {
+        if (error) {
+          // Extraire le vrai message d'erreur depuis le corps de la réponse
+          let msg = error.message
+          try { const body = await error.context?.json(); msg = body?.error || body?.msg || msg } catch {}
+          throw new Error(msg)
+        }
         if (data?.error) throw new Error(data.error)
         setClientSecret(data.client_secret)
       })
@@ -440,7 +477,10 @@ function StripePaymentStep({ service, detailer, profile, day, slot, form, paymen
 
   if (fetchError) return (
     <div style={{ padding: '20px 0' }}>
-      <p style={{ color: C.red, fontSize: 14, marginBottom: 20 }}>⚠ {fetchError}</p>
+      <div style={{ background: `${C.red}0D`, borderRadius: R.lg, padding: '12px 16px', marginBottom: 20, border: `1px solid ${C.red}22`, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke={C.red} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span style={{ color: C.red, fontSize: 14 }}>{fetchError}</span>
+      </div>
       <BackBtn onClick={onBack} />
     </div>
   )
@@ -448,18 +488,18 @@ function StripePaymentStep({ service, detailer, profile, day, slot, form, paymen
   const appearance = {
     theme: 'flat',
     variables: {
-      colorPrimary: '#007AFF',
-      colorBackground: '#F2F2F7',
-      colorText: '#1C1C1E',
-      colorTextSecondary: '#6C6C70',
-      colorDanger: '#FF3B30',
-      borderRadius: '12px',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+      colorPrimary: '#1D4ED8',
+      colorBackground: '#F4F4F8',
+      colorText: '#18181B',
+      colorTextSecondary: '#52525B',
+      colorDanger: '#DC2626',
+      borderRadius: '14px',
+      fontFamily: "'Outfit', -apple-system, 'Helvetica Neue', sans-serif",
       fontSizeBase: '15px',
     },
     rules: {
-      '.Input': { padding: '14px 16px', boxShadow: 'none' },
-      '.Label': { fontSize: '11px', fontWeight: '600', letterSpacing: '0.5px', textTransform: 'uppercase', color: '#6C6C70' },
+      '.Input': { padding: '14px 16px', boxShadow: 'none', border: '1px solid rgba(24,24,27,0.1)' },
+      '.Label': { fontSize: '11px', fontWeight: '700', letterSpacing: '0.5px', textTransform: 'uppercase', color: '#71717A' },
     },
   }
 
@@ -582,7 +622,12 @@ function CheckoutForm({ service, detailer, profile, day, slot, form, paymentMeth
         <PaymentElement options={{ layout: 'tabs' }} />
       </div>
 
-      {error && <p style={{ color: C.red, fontSize: 14, marginBottom: 14 }}>⚠ {error}</p>}
+      {error && (
+        <div style={{ background: `${C.red}0D`, borderRadius: R.lg, padding: '10px 14px', marginBottom: 14, border: `1px solid ${C.red}22`, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke={C.red} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span style={{ color: C.red, fontSize: 13 }}>{error}</span>
+        </div>
+      )}
 
       <div style={{ display: 'flex', gap: 10 }}>
         <BackBtn onClick={onBack} />
@@ -639,14 +684,24 @@ function OfflineBookingStep({ service, detailer, profile, day, slot, form, payme
         <Row label="Total"     value={`${service.price} €`} bold />
       </div>
 
-      <div style={{ background: '#FFF8E8', borderRadius: R.lg, padding: '14px 18px', marginBottom: 20, border: '1px solid rgba(255,149,0,0.2)' }}>
-        <div style={{ color: '#CC7A00', fontSize: 14, fontWeight: 700, marginBottom: 4 }}>💡 Paiement à la prestation</div>
-        <div style={{ color: '#996600', fontSize: 13, lineHeight: 1.5 }}>
-          Réglez en <strong>{methodLabel}</strong> directement lors de votre rendez-vous.
+      <div style={{ background: `${C.orange}0D`, borderRadius: R.lg, padding: '14px 18px', marginBottom: 20, border: `1px solid ${C.orange}28`, display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+        <div style={{ width: 32, height: 32, borderRadius: R.md, background: `${C.orange}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={C.orange} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div>
+          <div style={{ color: C.orange, fontSize: 13, fontWeight: 700, marginBottom: 3 }}>Paiement à la prestation</div>
+          <div style={{ color: C.secondary, fontSize: 13, lineHeight: 1.5 }}>
+            Réglez en <strong>{methodLabel}</strong> directement lors de votre rendez-vous.
+          </div>
         </div>
       </div>
 
-      {error && <p style={{ color: C.red, fontSize: 14, marginBottom: 14 }}>⚠ {error}</p>}
+      {error && (
+        <div style={{ background: `${C.red}0D`, borderRadius: R.lg, padding: '10px 14px', marginBottom: 14, border: `1px solid ${C.red}22`, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke={C.red} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span style={{ color: C.red, fontSize: 13 }}>{error}</span>
+        </div>
+      )}
 
       <div style={{ display: 'flex', gap: 10 }}>
         <BackBtn onClick={onBack} />
@@ -677,8 +732,9 @@ function Cta({ disabled, onClick, children, flex = 1 }) {
 
 function BackBtn({ onClick }) {
   return (
-    <button onClick={onClick} style={{ flex: 1, background: C.card, border: 'none', borderRadius: R.lg, padding: '14px', color: C.primary, fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: FONT, boxShadow: SHADOW.sm }}>
-      ← Retour
+    <button onClick={onClick} style={{ flex: 1, background: C.card, border: `1px solid ${C.separator}`, borderRadius: R.lg, padding: '14px', color: C.primary, fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: FONT, boxShadow: SHADOW.sm, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={C.secondary} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Retour
     </button>
   )
 }
