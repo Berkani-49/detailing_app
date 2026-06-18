@@ -1271,7 +1271,12 @@ function ProAdmin({ profile, detailer, onLogout, onDetailerUpdate, onProfileUpda
       }
       window.location.href = data.url
     } catch (e) {
-      setConnectError(e.message || 'Erreur lors de la connexion à Stripe')
+      const msg = e.message || ''
+      if (msg.includes('platform-profile') || msg.includes('responsibilities') || msg.includes('managing losses')) {
+        setConnectError('Configuration plateforme Stripe incomplète. Rendez-vous sur dashboard.stripe.com → Connect → Platform Profile pour finaliser la configuration.')
+      } else {
+        setConnectError(msg || 'Erreur lors de la connexion à Stripe')
+      }
       setConnectLoading(false)
     }
   }
