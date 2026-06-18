@@ -46,8 +46,9 @@ Deno.serve(async (req: Request) => {
       amount:   amountCents,
       currency: 'eur',
       description,
-      // Carte + Bancontact (Belgique). iDEAL retiré — nécessite activation séparée.
-      payment_method_types: ['card', 'bancontact'],
+      // Stripe choisit automatiquement les méthodes disponibles (Apple Pay, Google Pay,
+      // Bancontact, carte…) selon l'appareil et le compte.
+      automatic_payment_methods: { enabled: true },
     }
 
     // ── Stripe Connect : routage vers le compte du nettoyeur ────────────────
