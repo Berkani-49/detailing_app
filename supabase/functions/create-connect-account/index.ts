@@ -69,6 +69,18 @@ Deno.serve(async (req: Request) => {
         .eq('id', detailer_id)
     }
 
+    // Enregistrer le domaine de paiement sur le compte connecté
+    // (obligatoire pour Apple Pay / Google Pay sur les comptes Connect)
+    const appDomain = return_url ? new URL(return_url).hostname : 'detailsup.prelvio.com'
+    try {
+      await stripe.paymentMethodDomains.create(
+        { domain_name: appDomain },
+        { stripeAccount: accountId }
+      )
+    } catch (_) {
+      // Déjà enregistré ou non applicable — on ignore
+    }
+
     // Créer un Account Link pour l'onboarding (ou re-onboarding)
     const accountLink = await stripe.accountLinks.create({
       account: accountId,
